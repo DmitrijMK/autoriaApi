@@ -17,28 +17,49 @@ export class AutoriaService {
   constructor(private _http: HttpClient) {
   }
 
-  getSearchQuery(category_id = '1', type = 'search', id = '1'): string {
-    const params = new URLSearchParams();
-    if (type === 'search') {
-      params.set('category_id', `${category_id}`);
-      params.set('marka_id[1]', '84');
-      params.set('model_id[1]', '0');
-      params.set('price_ot', '1000');
-      params.set('price_do', '60000');
-      params.set('countpage', '20');
-    } else {
-      params.set('auto_id', `${id}`);
-    }
+  getCategoriesUrl() {
+    return `https://developers.ria.com/auto/categories/${this.apiKey}`;
+  }
 
-    return `${this.url + type + this.apiKey + '&' + params}`;
+  getCategories() {
+    return this._http.get(this.getCategoriesUrl());
+  }
+
+  getMarksUrl(category) {
+    return `https://developers.ria.com/auto/categories/${category}/marks${this.apiKey}`;
+  }
+
+  getMarks(category) {
+    return this._http.get(this.getMarksUrl(category));
+  }
+
+  getSearchQuery(value): string {
+    const params = new URLSearchParams();
+    params.set('category_id', `${value['categories']}`);
+    params.set('marka_id', `${value['marks']}`);
+    params.set('model_id', '0');
+    params.set('price_ot', '1000');
+    params.set('price_do', '9990000');
+    params.set('countpage', '10');
+
+    return `${this.url + 'search' + this.apiKey + '&' + params}`;
+  }
+
+  getIdSearch(id) {
+    const params = new URLSearchParams();
+    params.set('auto_id', `${id}`);
+
+    return `${this.url + 'info' + this.apiKey + '&' + params}`;
+
   }
 
   getNext(res) {
     this._dataSource$.next(res);
+    console.log(res);
   }
 
   getIdHref(res) {
-    return (res['result'].search_result.ids).map(id => this.getSearchQuery('1', 'info', id));
+    return (res['result'].search_result.ids).map(id => this.getIdSearch(id));
   }
 
   getData(value: string) {

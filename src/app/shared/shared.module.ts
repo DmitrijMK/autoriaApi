@@ -6,7 +6,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { AutoriaService } from './services/autoria.service';
 import { HeaderComponent } from './component/header/header.component';
 import { SearchComponent } from './component/search/search.component';
-import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatToolbarModule } from '@angular/material';
+import {
+  MatButtonModule,
+  MatCheckboxModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule, MatSelectModule,
+  MatToolbarModule
+} from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SearchoptionsComponent } from './component/searchoptions/searchoptions.component';
 
@@ -20,7 +27,9 @@ import { SearchoptionsComponent } from './component/searchoptions/searchoptions.
     MatIconModule,
     MatToolbarModule,
     ReactiveFormsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCheckboxModule,
+    MatSelectModule
   ],
   declarations: [HeaderComponent, SearchComponent, SearchoptionsComponent],
   providers: [AutoriaService],

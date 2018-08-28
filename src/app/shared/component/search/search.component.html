@@ -1,6 +1,24 @@
-<mat-form-field class="mat-form-field">
-  <input matInput #searchInput type="text" placeholder="search..." [formControl]="search">
-  <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="searchInput.value = ''">
-    <mat-icon>close</mat-icon>
-  </button>
-</mat-form-field>
+<form class="example-container" [formGroup]="searchForm">
+  <!--<mat-form-field class="mat-form-field">-->
+    <!--<input matInput #searchInput type="text" placeholder="search..." formControlName="search">-->
+    <!--<button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="searchInput.value = ''">-->
+      <!--<mat-icon>close</mat-icon>-->
+    <!--</button>-->
+  <!--</mat-form-field>-->
+
+  <mat-form-field>
+    <mat-select formControlName="categories" placeholder="category">
+      <mat-option *ngFor="let category of categories | async" [value]="category.value">
+        {{category['name']}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select formControlName="marks" placeholder="marks">
+      <mat-option *ngFor="let mark of marks | async" [value]="mark.value">
+        {{mark['name']}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>

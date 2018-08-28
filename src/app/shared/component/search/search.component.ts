@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { AutoriaService } from '../../services/autoria.service';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search',
@@ -9,14 +9,32 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
-  search: FormControl = new FormControl('');
+  categories;
+  marks;
 
-  constructor(private _http: AutoriaService) {
+  searchForm = this.fb.group({
+    // search: [''],
+    categories: [],
+    marks: [],
+  });
+
+  constructor(private _http: AutoriaService,
+              private fb: FormBuilder) {
   }
 
   ngOnInit() {
-    this.search.valueChanges
-      .pipe(switchMap(value => this._http.getData(value)), debounceTime(500), distinctUntilChanged())
+    this._http.getCategories().pipe(res => this.categories = res);
+
+    this.searchForm.valueChanges
+      .pipe(switchMap(value => {
+        this.getMarks(value.categories);
+
+        return this._http.getData(value);
+      }))
       .subscribe(res => this._http.getNext(res));
+  }
+
+  getMarks(category) {
+    this._http.getMarks(category).pipe(res => this.marks = res);
   }
 }
